@@ -1,5 +1,6 @@
+"use client"
 
-
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import {
     Dialog,
@@ -14,18 +15,41 @@ import {
 import { Field, FieldGroup } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { useRouter } from "next/navigation"
 
 
 const UpdateUserDialog = ({ user }) => {
 
-    const handleUptade = (e) => {
-        e.preventDefaulT()
+    const router = useRouter()
+    const [open, setOpen] = useState(false)
+
+    const handleUptade = async (e) => {
+        e.preventDefault()
         const formData = new FormData(e.currentTarget)
         const updatedUser = Object.fromEntries(formData.entries())
+
+        try {
+            const res = await fetch(`http://localhost:5000/users/${user._id}`, {
+                method: "PATCH",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updatedUser)
+            })
+            const result = await res.json()
+            console.log("result", result);
+
+            if (res.ok) {
+                setOpen(false)      // dialog ta bondho koro
+                router.refresh()    // tarpor notun data hara page lao
+            }
+        } catch (err) {
+            console.log("Update failed:", err)
+        }
     }
 
     return (
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger
                 render={
                     <Button
