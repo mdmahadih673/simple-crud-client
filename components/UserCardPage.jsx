@@ -6,6 +6,7 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
+import Link from "next/link";
 
 const UserCardPage = ({ user }) => {
     return (
@@ -39,13 +40,17 @@ const UserCardPage = ({ user }) => {
 
             {/* Footer & Button */}
             <CardFooter className="mt-auto border-t border-slate-100 bg-slate-50/70 p-5">
-                <Button
-                    type="button"
-                    variant="default"
-                    className="w-full cursor-pointer rounded-xl bg-blue-600 text-white hover:bg-blue-700"
-                >
-                    View User →
-                </Button>
+
+                <Link href={`/users/${user._id}`}>
+
+                    <Button
+                        type="button"
+                        variant="default"
+                        className="w-full cursor-pointer rounded-xl bg-blue-600 text-white hover:bg-blue-700"
+                    >
+                        View User →
+                    </Button>
+                </Link>
             </CardFooter>
 
         </Card>
